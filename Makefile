@@ -1,10 +1,14 @@
+# Компилятор для C
+CC=clang-12
+SRC=src
+
 all: main
 
 main: main.o
-	clang-12 main.o -o main
+	$(CC) main.o -o main
 
 main.o:
-	clang-12 -c src/main.c
+	$(CC) -c $(SRC)/main.c
 
 clean:
 	rm -rf *.o main
