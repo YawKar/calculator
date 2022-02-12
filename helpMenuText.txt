@@ -1,0 +1,8 @@
+help:
+
+help                                - prints this helpnote
+set [variable-name] [definition]    - adds (or reassign) a definition for variable named 'variable-name'
+exit                                - exits from engine
+showvars                            - shows all variables with their status and last assigned definition
+info                                - shows different information about engine's current state
+evaluate [variable-name]            - evaluates the value of a variable

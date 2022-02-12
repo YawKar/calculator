@@ -1,22 +1,21 @@
 # Компилятор для C
-CC=gcc
+CC = gcc
 
-all: main
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-main: main.o CommandLineInterface.o ConsoleEngine.o Logger.o
-	$(CC) main.o CommandLineInterface.o ConsoleEngine.o Logger.o -o Executable
+ALL_CSOURCES:=$(call rwildcard,src/,*.c)
+ALL_OBJECTS:=$(call rwildcard,./,*.o)
 
-main.o:
-	$(CC) -c src/main.c -o main.o
+all:
 
-CommandLineInterface.o:
-	$(CC) -c src/ConsoleEngine/CommandLineInterface.c -o CommandLineInterface.o
+link:
+	gcc $(ALL_OBJECTS) -o Exec -lm
 
-ConsoleEngine.o:
-	$(CC) -c src/ConsoleEngine/ConsoleEngine.c -o ConsoleEngine.o
-
-Logger.o:
-	$(CC) -c src/Logger/Logger.c -o Logger.o
+compile:
+	gcc -c $(ALL_CSOURCES)
 
 clean:
-	rm -rf *.o
+	rm -Rf *.o
+
+help:
+	@echo $(ALL_OBJECTS)
