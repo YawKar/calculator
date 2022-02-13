@@ -7,7 +7,8 @@ enum NodeType {
     NODETYPE_FUNCTION,  // Function node
     NODETYPE_OPERATOR,  // Operator node
     NODETYPE_CONSTANT,  // Constant node
-    NODETYPE_VARIABLE   // Variable node
+    NODETYPE_VARIABLE,  // Variable node
+    NODETYPE_UNARY      // Unary Node
 };
 
 typedef enum NodeType NodeType;

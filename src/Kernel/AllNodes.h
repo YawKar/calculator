@@ -3,4 +3,5 @@
 #include "Nodes/NumberNode/NumberNode.h"
 #include "Nodes/OperatorNode/OperatorNode.h"
 #include "Nodes/VariableNode/VariableNode.h"
+#include "Nodes/UnaryNode/UnaryNode.h"
 #include "GraphNode/GraphNode.h"

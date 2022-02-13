@@ -2,6 +2,7 @@
 #include "../OperatorType.h"
 #include "../ConstantType.h"
 #include "../FunctionType.h"
+#include "../UnaryType.h"
 #include "../../StringFunctions/StringFunctions.h"
 #include <string.h>
 #include <stdio.h>
@@ -49,6 +50,15 @@ int isExpressionBracketed(char* expression, int leftBorder, int rightBorder) {
 
 
 // CHECKS
+
+int hasUnaryOnTop(char* expression, int leftBorder, int rightBorder) {
+    for (int i = 0; i < globalGetUnaryTypeNumber(); ++i) {
+        if (expression[leftBorder] == globalGetUnaryByIndex(i)) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 int hasOperatorOnTop(char* expression, int leftBorder, int rightBorder) {
     int currentLevel = 0;
@@ -142,6 +152,14 @@ int hasFunctionOnTop(char* expression, int leftBorder, int rightBorder) {
 
 
 // Getters
+
+UnaryType getUnaryType(char* expression, int leftBorder, int rightBorder) {
+    for (int i = 0; i < globalGetUnaryTypeNumber(); ++i) {
+        if (globalGetUnaryByIndex(i) == expression[leftBorder])
+            return (UnaryType)i;
+    }
+    return UNARY_NULL;
+}
 
 int getHighestOperatorIndex(char* expression, int leftBorder, int rightBorder) {
     int currentLevel = 0;

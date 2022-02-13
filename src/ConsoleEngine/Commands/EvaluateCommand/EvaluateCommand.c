@@ -19,7 +19,7 @@ int performEvaluateCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* l
             logger->addRecord(logger, "'evaluate': variable wasn't assigned");
             return 0;
         } else {
-            double complex result = evaluateVariableNode(variableNode);
+            double complex result = evaluateVariableNode(variableNode, vTable);
             fprintf(outputStream, "Result: (%lf ; %lfi)\n", creal(result), cimag(result));
             return 0;
         }

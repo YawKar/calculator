@@ -2,6 +2,7 @@
 #include "EssentialFunctions.h"
 #include "../AllNodes.h"
 #include "../../StringFunctions/StringFunctions.h"
+#include "../Nodes/UnaryNode/UnaryNode.h"
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
@@ -40,7 +41,6 @@ void processFunction(GraphNode* root, char* expression, int leftBorder, int righ
     root->type = NODETYPE_FUNCTION;
     FunctionNode* functionNode = newFunctionNode();
     root->node = (void*)functionNode;
-    functionNode->operands = newPointerContainer();
     functionNode->type = getFunctionType(expression, leftBorder, rightBorder);
     parseOperands(expression, leftBorder, rightBorder, functionNode->operands, vTable);
 }
@@ -64,6 +64,16 @@ void processVariable(GraphNode* root, char* expression, int leftBorder, int righ
     }
 }
 
+void processUnary(GraphNode* root, char* expression, int leftBorder, int rightBorder, VariablesTable* vTable) {
+    root->type = NODETYPE_UNARY;
+    UnaryNode* unaryNode = newUnaryNode();
+    unaryNode->type = getUnaryType(expression, leftBorder, rightBorder);
+    root->node = (void*)unaryNode;
+    GraphNode* subpart = newGraphNode();
+    containerPush(unaryNode->pointerContainer, (void*)subpart);
+    parseExpression(subpart, expression, leftBorder + 1, rightBorder, vTable);
+}
+
 
 void parseExpression(GraphNode* root, char* expression, int leftBorder, int rightBorder, VariablesTable* vTable) {
     if (isExpressionBracketed(expression, leftBorder, rightBorder)) {
@@ -77,6 +87,8 @@ void parseExpression(GraphNode* root, char* expression, int leftBorder, int righ
         processConstant(root, expression, leftBorder, rightBorder, vTable);
     } else if (hasFunctionOnTop(expression, leftBorder, rightBorder)) {
         processFunction(root, expression, leftBorder, rightBorder, vTable);
+    } else if (hasUnaryOnTop(expression, leftBorder, rightBorder)) {
+        processUnary(root, expression, leftBorder, rightBorder, vTable);
     } else if (hasOperatorOnTop(expression, leftBorder, rightBorder)) {
         processOperator(root, expression, leftBorder, rightBorder, vTable);
     } else { // has variable on top

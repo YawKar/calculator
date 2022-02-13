@@ -24,12 +24,13 @@ int performSetCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger
     VariableNode* variableNode;
     if (vTable->containVariable(vTable, variableName)) {
         variableNode = (VariableNode*)vTable->getVariableNode(vTable, variableName);
+        variableNode->operands->size = 0;
     } else {
         variableNode = newVariableNode();
+        vTable->assignVariableNode(vTable, variableName, variableNode);
     }
     GraphNode* parsedDefinition = newGraphNode();
     parseExpression(parsedDefinition, variableDefinition, 0, strlen(variableDefinition), vTable);
     containerPush(variableNode->operands, (void*)parsedDefinition);
-    vTable->assignVariableNode(vTable, variableName, variableNode);
     return 0;
 }

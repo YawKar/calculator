@@ -1,9 +1,6 @@
 set expression -(ch*lol/kek/ch*kek/lol-1)
-showvars
 set ch (lol + kek) * imag(-14i)
-showvars
 set lol abs(1337*PI*e*i*0) + 0.504 * ln(pow(e,3))/tg(PI/4)
-showvars
 set kek 1.488
-showvars
 evaluate expression
+exit
