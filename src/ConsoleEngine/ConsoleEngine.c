@@ -17,7 +17,7 @@ void runConsoleEngine(Logger* logger) {
         logger->addRecord(logger, "Got user's input line (raw):");
         logger->addRecord(logger, inputLine);
         LineArgs* lineArgs = parseLineArgs(inputLine);
-        exit = performCommand(lineArgs, vTable, logger);
+        exit = performCommand(lineArgs, vTable, logger, stdout);
     }
     logger->addRecord(logger, "Ended the main while(!exit) cycle");
 }

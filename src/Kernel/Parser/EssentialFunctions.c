@@ -4,6 +4,7 @@
 #include "../FunctionType.h"
 #include "../../StringFunctions/StringFunctions.h"
 #include <string.h>
+#include <stdio.h>
 
 int countEndsBrackets(char* expression, int leftBorder, int rightBorder) {
     int endsBracketsCounter = 0;
@@ -60,7 +61,7 @@ int hasOperatorOnTop(char* expression, int leftBorder, int rightBorder) {
             --currentLevel;
             continue;
         }
-        if (currentLevel != 0)
+        if (currentLevel != 0 || i == leftBorder || i == rightBorder - 1)
             continue;
         for (int j = 0; j < globalGetOperatorTypeNumber(); ++j) {
             if (expression[i] == globalGetOperatorByIndex(j))
@@ -108,8 +109,20 @@ int hasFunctionOnTop(char* expression, int leftBorder, int rightBorder) {
             break;
         }
     }
+    if (expression[rightBorder - 1] != ')')
+        return 0;
     if (openBracketIndex == -1)
         return 0;
+    int balance = 1;
+    for (int i = openBracketIndex + 1; i < rightBorder - 1; ++i) {
+        if (expression[i] == '(')
+            ++balance;
+        if (expression[i] == ')') {
+            --balance;
+            if (balance == 0)
+                return 0;
+        }
+    }
     for (int stdFunctionIndex = 0; stdFunctionIndex < globalGetFunctionTypeNumber(); ++stdFunctionIndex) {
         int stdFunctionLen = strlen(globalGetFunctionByIndex(stdFunctionIndex));
         if (stdFunctionLen != openBracketIndex - leftBorder)
@@ -133,7 +146,7 @@ int hasFunctionOnTop(char* expression, int leftBorder, int rightBorder) {
 int getHighestOperatorIndex(char* expression, int leftBorder, int rightBorder) {
     int currentLevel = 0;
     int highestOperatorIndex = -1;
-    int highestOperator = -1;
+    int highestOperator = 10;
     for (int i = leftBorder; i < rightBorder; ++i) {
         if (expression[i] == '(') {
             ++currentLevel;
@@ -143,11 +156,11 @@ int getHighestOperatorIndex(char* expression, int leftBorder, int rightBorder) {
             --currentLevel;
             continue;
         }
-        if (currentLevel != 0)
+        if (currentLevel != 0 || i == leftBorder || i == rightBorder - 1)
             continue;
         for (int j = 0; j < globalGetOperatorTypeNumber(); ++j) {
             if (expression[i] == globalGetOperatorByIndex(j)) {
-                if (j > highestOperator) {
+                if (j < highestOperator) {
                     highestOperator = j;
                     highestOperatorIndex = i;
                 }

@@ -3,8 +3,8 @@
 #include "../../LineArgs/LineArgs.h"
 #include "../../../Kernel/VariablesTable/VariablesTable.h"
 #include "../../../Logger/Logger.h"
+#include <stdio.h>
 
-
-int performHelpCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger);
+int performHelpCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger, FILE* outputStream);
 
 #endif

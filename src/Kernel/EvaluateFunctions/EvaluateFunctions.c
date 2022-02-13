@@ -1,5 +1,6 @@
 #include "EvaluateFunctions.h"
 #include <math.h>
+#include <stdio.h>
 
 double complex evaluateVariableNode(VariableNode* variableNode) {
     return evaluateGraphNode((GraphNode*)variableNode->operands->content[0]);

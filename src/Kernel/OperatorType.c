@@ -1,12 +1,12 @@
 #include "OperatorType.h"
 
 int globalGetOperatorTypeNumber() {
-    return 6;
+    return 5;
 }
 
 char globalGetOperatorByIndex(int index) {
     char* operators = "+-*/^";
-    if (index < 0 || index > globalGetOperatorTypeNumber())
+    if (index < 0 || index >= globalGetOperatorTypeNumber())
         return '_';
     return operators[index];
 }

@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int performSetCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger) {
+int performSetCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger, FILE* outputStream) {
     if (lineArgs->argsNumber < 3) {
-        printf("Command 'set' must have at least 3 arguments, but %d were provided\n", lineArgs->argsNumber - 1);
+        fprintf(outputStream, "Command 'set' must have at least 3 arguments, but %d were provided\n", lineArgs->argsNumber - 1);
         logger->addRecord(logger, "'set': incorrect amount of arguments.");
         return 0;
     }
@@ -21,7 +21,12 @@ int performSetCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger
         variableDefinition = concatted;
     }
     // Now parsing the expression
-    VariableNode* variableNode = newVariableNode();
+    VariableNode* variableNode;
+    if (vTable->containVariable(vTable, variableName)) {
+        variableNode = (VariableNode*)vTable->getVariableNode(vTable, variableName);
+    } else {
+        variableNode = newVariableNode();
+    }
     GraphNode* parsedDefinition = newGraphNode();
     parseExpression(parsedDefinition, variableDefinition, 0, strlen(variableDefinition), vTable);
     containerPush(variableNode->operands, (void*)parsedDefinition);

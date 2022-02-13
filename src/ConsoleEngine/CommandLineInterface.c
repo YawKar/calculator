@@ -15,30 +15,30 @@
 #include "Commands/EvaluateCommand/EvaluateCommand.h"
 
 // Returns 1 if 'exit' command was entered.
-int performCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger) {
+int performCommand(LineArgs* lineArgs, VariablesTable* vTable, Logger* logger, FILE* outputStream) {
     if (lineArgs->argsNumber == 0) {
         logger->addRecord(logger, "Empty lineArgs");
-        printf("No commands were found.\n");
-        printHelpHint(logger);
+        fprintf(outputStream, "No commands were found.\n");
+        printHelpHint(logger, outputStream);
         return 0;
     }
     if (areStringsEqual(lineArgs->args[0], "help")) {
-        return performHelpCommand(lineArgs, vTable, logger);
+        return performHelpCommand(lineArgs, vTable, logger, outputStream);
     } else if (areStringsEqual(lineArgs->args[0], "exit")) {
-        return performExitCommand(lineArgs, vTable, logger);
+        return performExitCommand(lineArgs, vTable, logger, outputStream);
     } else if (areStringsEqual(lineArgs->args[0], "set")) {
-        return performSetCommand(lineArgs, vTable, logger);
+        return performSetCommand(lineArgs, vTable, logger, outputStream);
     } else if (areStringsEqual(lineArgs->args[0], "showvars")) {
-        return performShowvarsCommand(lineArgs, vTable, logger);
+        return performShowvarsCommand(lineArgs, vTable, logger, outputStream);
     } else if (areStringsEqual(lineArgs->args[0], "info")) {
-        return performInfoCommand(lineArgs, vTable, logger);
+        return performInfoCommand(lineArgs, vTable, logger, outputStream);
     } else if (areStringsEqual(lineArgs->args[0], "evaluate")) {
-        return performEvaluateCommand(lineArgs, vTable, logger);
+        return performEvaluateCommand(lineArgs, vTable, logger, outputStream);
     } else {
         // Default warning
         logger->addRecord(logger, "Unknown command was entered");
-        printf("Unknown command '%s'.\n", lineArgs->args[0]);
-        printHelpHint(logger);
+        fprintf(outputStream, "Unknown command '%s'.\n", lineArgs->args[0]);
+        printHelpHint(logger, outputStream);
         return 0;
     }
     return 0;

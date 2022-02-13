@@ -4,6 +4,7 @@
 #include "../../StringFunctions/StringFunctions.h"
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 void processOperator(GraphNode* root, char* expression, int leftBorder, int rightBorder, VariablesTable* vTable) {
     root->type = NODETYPE_OPERATOR;
@@ -52,7 +53,7 @@ void processVariable(GraphNode* root, char* expression, int leftBorder, int righ
     }
     variableName[rightBorder - leftBorder] = '\0';
     if (vTable->containVariable(vTable, variableName)) {
-        root->node = (void*)vTable->getVariableNode(vTable, variableName);
+        root->node = vTable->getVariableNode(vTable, variableName);
     }
     else {
         vTable->addVariableName(vTable, variableName);
@@ -70,14 +71,14 @@ void parseExpression(GraphNode* root, char* expression, int leftBorder, int righ
 		leftBorder += endsBracketsNumber;
 		rightBorder -= endsBracketsNumber;
 	}
-    if (hasOperatorOnTop(expression, leftBorder, rightBorder)) {
-        processOperator(root, expression, leftBorder, rightBorder, vTable);
-    } else if (hasNumberOnTop(expression, leftBorder, rightBorder)) {
+    if (hasNumberOnTop(expression, leftBorder, rightBorder)) {
         processNumber(root, expression, leftBorder, rightBorder, vTable);
     } else if (hasConstantOnTop(expression, leftBorder, rightBorder)) {
         processConstant(root, expression, leftBorder, rightBorder, vTable);
     } else if (hasFunctionOnTop(expression, leftBorder, rightBorder)) {
         processFunction(root, expression, leftBorder, rightBorder, vTable);
+    } else if (hasOperatorOnTop(expression, leftBorder, rightBorder)) {
+        processOperator(root, expression, leftBorder, rightBorder, vTable);
     } else { // has variable on top
         processVariable(root, expression, leftBorder, rightBorder, vTable);
     }
@@ -134,17 +135,21 @@ double complex parseNumber(char* expression, int leftBorder, int rightBorder) {
         }
     }
     int isComplex = expression[rightBorder - 1] == 'i';
-    if (dotIndex == -1)
-        dotIndex = rightBorder;
-    for (int i = startIndex; i < dotIndex; ++i) {
-        parsedNumber += pow(10L, (double)dotIndex - i - 1) * ((double)expression[i] - '0');
+    if (dotIndex == -1) {
+        for (int i = startIndex; i < rightBorder - isComplex; ++i)
+            parsedNumber += pow(10L, (double)rightBorder - isComplex - i - 1) * ((double)expression[i] - '0');
+    } else {
+        for (int i = startIndex; i < dotIndex; ++i)
+            parsedNumber += pow(10L, (double)dotIndex - i - 1) * ((double)expression[i] - '0');
+        for (int i = dotIndex + 1; i < rightBorder - isComplex; ++i)
+            parsedNumber += pow(10L, (double)dotIndex - i) * ((double)expression[i] - '0');
     }
-    for (int i = dotIndex + 1; i < rightBorder - isComplex; ++i) {
-        parsedNumber += pow(10L, (double)dotIndex - i) * ((double)expression[i] - '0');
+    if (rightBorder - startIndex == 1 && expression[startIndex] == 'i') {
+        parsedNumber = 1*I;
+    } else if (isComplex) {
+        parsedNumber = creal(parsedNumber) * I;
     }
     if (numberSign == 1)
         parsedNumber *= -1.0L;
-    if (isComplex)
-        parsedNumber = creal(parsedNumber) * I;
     return parsedNumber;
 }
