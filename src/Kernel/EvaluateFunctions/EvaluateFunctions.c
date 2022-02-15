@@ -149,8 +149,6 @@ double complex evaluateOperatorNode(OperatorNode* operatorNode, VariablesTable* 
             {
                 double complex leftRes = evaluateGraphNode(left, vTable);
                 double complex rightRes = evaluateGraphNode(right, vTable);
-                printf("%lf %lf\n", creal(leftRes), cimag(leftRes));
-                printf("%lf %lf\n", creal(rightRes), cimag(rightRes));
                 return evaluateGraphNode(left, vTable) / evaluateGraphNode(right, vTable);
             }
         case OPERTYPE_MINUS:

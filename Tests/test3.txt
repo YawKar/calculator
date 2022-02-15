@@ -1,8 +1,0 @@
-set expression -(log(sqrt(xxx), xxx) + xxxx + (-x) - xx)
-set xxxx tg(PI*(-x)) + 14.1i
-set xxx x ^ xx + ln(xx*e)
-set xx 1 + (-8)*cos(PI/2*x)
-set x 8+(-14)/2*(-1)+19-(-1)
-evaluate expression
-exit
-
